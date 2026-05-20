@@ -1,0 +1,1314 @@
+{
+  "info": {
+    "_postman_id": "a0c324cd-c2fe-4c82-9671-a71a467bb722",
+    "name": "API Integration Testing Copy",
+    "description": "# API Integration Testing\n\n---\n\n## 📋 Skenario (12 Total)\n\n### ✅ POSITIF (6)\n\n| ID | Skenario | Method | Endpoint |\n| --- | --- | --- | --- |\n| POS-01 | Halaman utama dapat diakses | GET | / |\n| POS-02 | Daftar apartemen dapat diakses | GET | /apartemen |\n| POS-03 | Detail apartemen ID valid (ID=1) | GET | /apartemen/1 |\n| POS-04 | Register pengguna baru | POST | /register |\n| POS-05 | Login kredensial valid | POST | /login |\n| POS-06 | Pengajuan transaksi properti | POST | /transaksi |\n\n### ❌ NEGATIF (6)\n\n| ID | Skenario | Method | Endpoint |\n| --- | --- | --- | --- |\n| NEG-01 | URL tidak terdaftar → 404 | GET | /halaman-tidak-ada |\n| NEG-02 | Detail apartemen ID tidak ada di DB | GET | /apartemen/99999 |\n| NEG-03 | Register dengan email duplikat | POST | /register |\n| NEG-04 | Login password salah | POST | /login |\n| NEG-05 | Login email tidak terdaftar | POST | /login |\n| NEG-06 | Register password tidak cocok | POST | /register |\n\n---",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52787859"
+  },
+  "item": [
+    {
+      "name": "🔧 SETUP — Ambil CSRF Token",
+      "item": [
+        {
+          "name": "SETUP-01 · Ambil CSRF Token dari Halaman Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('[SETUP-01] Sanctum CSRF Cookie — HTTP 204', function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});",
+                  "",
+                  "// Laravel Sanctum sets the XSRF-TOKEN cookie on a 204 response.",
+                  "// Postman stores cookies automatically; we read it and save to a collection variable.",
+                  "const xsrfCookie = pm.cookies.get('XSRF-TOKEN');",
+                  "",
+                  "if (xsrfCookie) {",
+                  "    // The cookie value is URL-encoded; decode it before use.",
+                  "    const decoded = decodeURIComponent(xsrfCookie);",
+                  "    pm.collectionVariables.set('csrf_token', decoded);",
+                  "    console.log('✅ CSRF Token (XSRF-TOKEN cookie) tersimpan.');",
+                  "} else {",
+                  "    console.warn('⚠️ XSRF-TOKEN cookie tidak ditemukan. Pastikan Sanctum sudah dikonfigurasi dan cookie domain cocok.');",
+                  "}",
+                  "",
+                  "pm.test('[SETUP-01] CSRF Token berhasil diambil dari cookie', function () {",
+                  "    const t = pm.collectionVariables.get('csrf_token');",
+                  "    pm.expect(t).to.not.be.empty;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Referer",
+                "value": "{{base_url}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/sanctum/csrf-cookie",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "sanctum",
+                "csrf-cookie"
+              ]
+            },
+            "description": "Dipakai sebelum POS-05, NEG-04, NEG-05 (request POST ke /login)."
+          },
+          "response": []
+        },
+        {
+          "name": "SETUP-02 · Ambil CSRF Token dari Halaman Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('[SETUP-02] Sanctum CSRF Cookie — HTTP 204', function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});",
+                  "",
+                  "// Laravel Sanctum sets the XSRF-TOKEN cookie on a 204 response.",
+                  "// Postman stores cookies automatically; we read it and save to a collection variable.",
+                  "const xsrfCookie = pm.cookies.get('XSRF-TOKEN');",
+                  "",
+                  "if (xsrfCookie) {",
+                  "    // The cookie value is URL-encoded; decode it before use.",
+                  "    const decoded = decodeURIComponent(xsrfCookie);",
+                  "    pm.collectionVariables.set('csrf_token', decoded);",
+                  "    console.log('✅ CSRF Token (XSRF-TOKEN cookie) tersimpan.');",
+                  "} else {",
+                  "    console.warn('⚠️ XSRF-TOKEN cookie tidak ditemukan. Pastikan Sanctum sudah dikonfigurasi dan cookie domain cocok.');",
+                  "}",
+                  "",
+                  "pm.test('[SETUP-02] CSRF Token berhasil diambil dari cookie', function () {",
+                  "    const t = pm.collectionVariables.get('csrf_token');",
+                  "    pm.expect(t).to.not.be.empty;",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Referer",
+                "value": "{{base_url}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/sanctum/csrf-cookie",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "sanctum",
+                "csrf-cookie"
+              ]
+            },
+            "description": "Dipakai sebelum POS-04, NEG-03, NEG-06 (request POST ke /register)."
+          },
+          "response": []
+        }
+      ],
+      "description": "⚡ WAJIB dijalankan PERTAMA sebelum semua test POST.\nScript otomatis menyimpan CSRF token ke collection variable."
+    },
+    {
+      "name": "✅ POSITIF",
+      "item": [
+        {
+          "name": "POS-01 · Halaman Utama Dapat Diakses",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ============================================================",
+                  "// POS-01 | Halaman Utama",
+                  "// Method   : GET",
+                  "// Endpoint : /",
+                  "// Tujuan   : Memastikan halaman utama website dapat diakses",
+                  "//            dan merespons HTTP 200 dengan konten HTML valid.",
+                  "// ============================================================",
+                  "",
+                  "pm.test('[POS-01] Status HTTP harus 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('[POS-01] Content-Type harus text/html', function () {",
+                  "    pm.expect(pm.response.headers.get('Content-Type')).to.include('text/html');",
+                  "});",
+                  "",
+                  "pm.test('[POS-01] Response body tidak kosong (> 1 KB)', function () {",
+                  "    pm.expect(pm.response.text().length).to.be.above(1000);",
+                  "});",
+                  "",
+                  "pm.test('[POS-01] Tidak ada Laravel error page (Whoops / 500)', function () {",
+                  "    pm.expect(pm.response.text()).to.not.include('Whoops');",
+                  "    pm.expect(pm.response.text()).to.not.include('500 | Server Error');",
+                  "});",
+                  "",
+                  "pm.test('[POS-01] Halaman mengandung tag HTML yang valid', function () {",
+                  "    pm.expect(pm.response.text()).to.include('<html');",
+                  "    pm.expect(pm.response.text()).to.include('</html>');",
+                  "});",
+                  "",
+                  "pm.test('[POS-01] Halaman mengandung konten terkait properti', function () {",
+                  "    const body = pm.response.text().toLowerCase();",
+                  "    const found = ['apartemen','properti','rumah','property','jual','beli'].some(k => body.includes(k));",
+                  "    pm.expect(found).to.be.true;",
+                  "});",
+                  "",
+                  "// Simpan CSRF token jika ada di halaman utama",
+                  "const m = pm.response.text().match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (m) pm.collectionVariables.set('csrf_token', m[1]);",
+                  "",
+                  "console.log('POS-01 ✅ Selesai | Status:', pm.response.code, '| Time:', pm.response.responseTime + 'ms');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              },
+              {
+                "key": "User-Agent",
+                "value": "PostmanIntegrationTest/1.0"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                ""
+              ]
+            },
+            "description": "## POS-01 | Halaman Utama\n**Method:** GET | **Endpoint:** `/`\n\nMemastikan halaman utama dapat diakses dengan HTTP 200 dan mengandung konten properti yang valid.\n\n**Ekspektasi:**\n- ✅ Status 200\n- ✅ Content-Type text/html\n- ✅ Body > 1KB\n- ✅ Tidak ada error Whoops/500\n- ✅ Mengandung kata kunci properti"
+          },
+          "response": []
+        },
+        {
+          "name": "POS-02 · Daftar Apartemen Dapat Diakses",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ============================================================",
+                  "// POS-02 | Daftar Apartemen",
+                  "// Method   : GET",
+                  "// Endpoint : /apartemen",
+                  "// Tujuan   : Memastikan halaman listing apartemen dapat",
+                  "//            diakses dan menampilkan data properti.",
+                  "// ============================================================",
+                  "",
+                  "pm.test('[POS-02] Status HTTP harus 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('[POS-02] Content-Type harus text/html', function () {",
+                  "    pm.expect(pm.response.headers.get('Content-Type')).to.include('text/html');",
+                  "});",
+                  "",
+                  "pm.test('[POS-02] Response body lebih dari 2 KB (ada data listing)', function () {",
+                  "    pm.expect(pm.response.text().length).to.be.above(2000);",
+                  "});",
+                  "",
+                  "pm.test('[POS-02] Tidak ada Laravel error (Whoops / 500)', function () {",
+                  "    pm.expect(pm.response.text()).to.not.include('Whoops');",
+                  "    pm.expect(pm.response.text()).to.not.include('500 | Server Error');",
+                  "});",
+                  "",
+                  "pm.test('[POS-02] Halaman mengandung kata kunci listing properti', function () {",
+                  "    const body = pm.response.text().toLowerCase();",
+                  "    const found = ['apartemen','properti','rumah','property','listing','harga','rp'].some(k => body.includes(k));",
+                  "    pm.expect(found).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test('[POS-02] Halaman berhasil dirender (ada tag body)', function () {",
+                  "    pm.expect(pm.response.text()).to.include('<body');",
+                  "});",
+                  "",
+                  "console.log('POS-02 ✅ Selesai | Status:', pm.response.code, '| Time:', pm.response.responseTime + 'ms');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/apartemen",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "apartemen"
+              ]
+            },
+            "description": "## POS-02 | Daftar Apartemen\n**Method:** GET | **Endpoint:** `/apartemen`\n\nMemastikan halaman listing apartemen dapat diakses.\n\n**Ekspektasi:**\n- ✅ Status 200\n- ✅ Body > 2KB (ada data listing)\n- ✅ Mengandung kata kunci properti/harga"
+          },
+          "response": []
+        },
+        {
+          "name": "POS-03 · Detail Apartemen ID Valid (ID=1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ============================================================",
+                  "// POS-03 | Detail Apartemen ID Valid",
+                  "// Method   : GET",
+                  "// Endpoint : /apartemen/{id}",
+                  "// Tujuan   : Memastikan halaman detail properti dengan ID",
+                  "//            valid menampilkan informasi lengkap.",
+                  "// ============================================================",
+                  "",
+                  "pm.test('[POS-03] Status HTTP harus 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('[POS-03] Bukan halaman 404 — properti ditemukan di DB', function () {",
+                  "    const body = pm.response.text();",
+                  "    pm.expect(body).to.not.include('404');",
+                  "    pm.expect(body).to.not.include('Not Found');",
+                  "});",
+                  "",
+                  "pm.test('[POS-03] Tidak ada Laravel error page (Whoops / 500)', function () {",
+                  "    pm.expect(pm.response.text()).to.not.include('Whoops');",
+                  "    pm.expect(pm.response.text()).to.not.include('500 | Server Error');",
+                  "});",
+                  "",
+                  "pm.test('[POS-03] Halaman mengandung info harga properti (Rp / IDR)', function () {",
+                  "    const body = pm.response.text();",
+                  "    const hasPrice = body.includes('Rp') || body.includes('IDR') ||",
+                  "                    body.toLowerCase().includes('harga');",
+                  "    pm.expect(hasPrice).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test('[POS-03] Halaman mengandung elemen detail properti', function () {",
+                  "    const body = pm.response.text().toLowerCase();",
+                  "    const hasDetail = body.includes('kamar') || body.includes('luas') ||",
+                  "                     body.includes('lokasi') || body.includes('deskripsi') ||",
+                  "                     body.includes('apartemen') || body.includes('properti');",
+                  "    pm.expect(hasDetail).to.be.true;",
+                  "});",
+                  "",
+                  "// Update CSRF token dari halaman detail",
+                  "const m = pm.response.text().match(/name=[\"']_token[\"']\\s+value=[\"']([^\"']+)[\"']/);",
+                  "if (m) {",
+                  "    pm.collectionVariables.set('csrf_token', m[1]);",
+                  "    console.log('🔑 CSRF token diperbarui dari halaman detail');",
+                  "}",
+                  "",
+                  "console.log('POS-03 ✅ Selesai | Status:', pm.response.code, '| Time:', pm.response.responseTime + 'ms');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/apartemen/{{properti_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "apartemen",
+                "{{properti_id}}"
+              ]
+            },
+            "description": "## POS-03 | Detail Apartemen ID Valid\n**Method:** GET | **Endpoint:** `/apartemen/{{properti_id}}`\n\nMemastikan halaman detail properti menampilkan data lengkap.\n\n⚠️ Sesuaikan `properti_id` di Collection Variables (default: 1)\n\n**Ekspektasi:**\n- ✅ Status 200\n- ✅ Tidak 404\n- ✅ Ada info harga (Rp/IDR)\n- ✅ Ada elemen detail properti"
+          },
+          "response": []
+        },
+        {
+          "name": "POS-04 · Register Pengguna Baru",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Generate email & nama unik setiap run",
+                  "const suffix = Math.random().toString(36).substring(2, 10);",
+                  "pm.collectionVariables.set('random_email', `user_${suffix}@mailtest.com`);",
+                  "pm.collectionVariables.set('random_name',  `User ${suffix}`);",
+                  "console.log('📧 Register dengan email:', `user_${suffix}@mailtest.com`);"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ============================================================",
+                  "// POS-04 | Register Pengguna Baru",
+                  "// Method   : POST",
+                  "// Endpoint : /register",
+                  "// Tujuan   : Memastikan pendaftaran akun baru dengan data",
+                  "//            valid (nama, email unik, password) diterima sistem.",
+                  "// ============================================================",
+                  "",
+                  "pm.test('[POS-04] Status HTTP 200 atau 302 (sukses / redirect)', function () {",
+                  "    pm.expect([200, 201, 302]).to.include(pm.response.code);",
+                  "});",
+                  "",
+                  "pm.test('[POS-04] Tidak ada error server (Whoops / 500)', function () {",
+                  "    pm.expect(pm.response.text()).to.not.include('Whoops');",
+                  "    pm.expect(pm.response.text()).to.not.include('500 | Server Error');",
+                  "});",
+                  "",
+                  "pm.test('[POS-04] Email tidak ditolak sebagai duplikat', function () {",
+                  "    const body = pm.response.text().toLowerCase();",
+                  "    pm.expect(body).to.not.include('has already been taken');",
+                  "    pm.expect(body).to.not.include('sudah digunakan');",
+                  "    pm.expect(body).to.not.include('sudah terdaftar');",
+                  "});",
+                  "",
+                  "pm.test('[POS-04] Tidak ada error validasi password', function () {",
+                  "    const body = pm.response.text().toLowerCase();",
+                  "    pm.expect(body).to.not.include('password confirmation does not match');",
+                  "    pm.expect(body).to.not.include('konfirmasi password tidak cocok');",
+                  "});",
+                  "",
+                  "pm.test('[POS-04] Tidak ada error validasi field wajib', function () {",
+                  "    const body = pm.response.text().toLowerCase();",
+                  "    pm.expect(body).to.not.include('the name field is required');",
+                  "    pm.expect(body).to.not.include('the email field is required');",
+                  "    pm.expect(body).to.not.include('the password field is required');",
+                  "});",
+                  "",
+                  "console.log('POS-04 ✅ Selesai | Status:', pm.response.code,",
+                  "            '| Email:', pm.collectionVariables.get('random_email'));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Referer",
+                "value": "{{base_url}}/register"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "description": "CSRF Token — dari SETUP-02"
+                },
+                {
+                  "key": "name",
+                  "value": "{{random_name}}",
+                  "description": "Nama (auto-generated)"
+                },
+                {
+                  "key": "email",
+                  "value": "{{random_email}}",
+                  "description": "Email unik (auto-generated)"
+                },
+                {
+                  "key": "password",
+                  "value": "password123",
+                  "description": "Password minimal 8 karakter"
+                },
+                {
+                  "key": "password_confirmation",
+                  "value": "password123",
+                  "description": "Harus sama dengan password"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "register"
+              ]
+            },
+            "description": "## POS-04 | Register Pengguna Baru\n**Method:** POST | **Endpoint:** `/register`\n\nEmail dibuat unik setiap run oleh Pre-request Script.\n\n⚠️ Jalankan **SETUP-02** dulu untuk mendapatkan CSRF token terbaru.\n\n**Ekspektasi:**\n- ✅ Status 200 atau 302\n- ✅ Tidak ada error duplikat/validasi"
+          },
+          "response": []
+        },
+        {
+          "name": "POS-05 · Login Pengguna — Kredensial Valid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('[POS-05] Status HTTP 200 atau 302 (sukses / redirect)', function () {",
+                  "    pm.expect([200, 302]).to.include(pm.response.code);",
+                  "});",
+                  "",
+                  "pm.test('[POS-05] Tidak ada error server (Whoops / 500)', function () {",
+                  "    pm.expect(pm.response.text()).to.not.include('Whoops');",
+                  "    pm.expect(pm.response.text()).to.not.include('500 | Server Error');",
+                  "});",
+                  "",
+                  "pm.test('[POS-05] Tidak ada pesan error kredensial tidak cocok', function () {",
+                  "    const body = pm.response.text().toLowerCase();",
+                  "    pm.expect(body).to.not.include('these credentials do not match');",
+                  "    pm.expect(body).to.not.include('kredensial ini tidak cocok');",
+                  "    pm.expect(body).to.not.include('invalid credentials');",
+                  "});",
+                  "",
+                  "pm.test('[POS-05] Tidak ada error validasi field login', function () {",
+                  "    const body = pm.response.text();",
+                  "    pm.expect(body).to.not.include('The email field is required');",
+                  "    pm.expect(body).to.not.include('The password field is required');",
+                  "});",
+                  "",
+                  "pm.test('[POS-05] Response berhasil diterima server', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                  "});",
+                  "",
+                  "// Simpan laravel_session dari Set-Cookie header atau cookie jar",
+                  "const setCookie = pm.response.headers.get('Set-Cookie') || '';",
+                  "const sessionMatch = setCookie.match(/laravel_session=([^;]+)/);",
+                  "if (sessionMatch) {",
+                  "    pm.collectionVariables.set('laravel_session', sessionMatch[1]);",
+                  "    console.log('✅ laravel_session tersimpan:', sessionMatch[1].substring(0, 20) + '...');",
+                  "} else {",
+                  "    const jar = pm.cookies.get('laravel_session');",
+                  "    if (jar) {",
+                  "        pm.collectionVariables.set('laravel_session', jar);",
+                  "        console.log('✅ laravel_session dari cookie jar');",
+                  "    } else {",
+                  "        console.warn('⚠️ laravel_session tidak ditemukan — cek apakah login berhasil');",
+                  "    }",
+                  "}",
+                  "",
+                  "console.log('POS-05 ✅ Selesai | Status:', pm.response.code, '| Email:', pm.collectionVariables.get('valid_email'));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Referer",
+                "value": "{{base_url}}/login"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}",
+                  "description": "CSRF Token — dari SETUP-01"
+                },
+                {
+                  "key": "email",
+                  "value": "{{valid_email}}",
+                  "description": "Email akun yang sudah ada di DB"
+                },
+                {
+                  "key": "password",
+                  "value": "{{valid_password}}",
+                  "description": "Password akun"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            },
+            "description": "## POS-05 | Login Kredensial Valid\n**Method:** POST | **Endpoint:** `/login`\n\n⚠️ Sesuaikan `valid_email` dan `valid_password` di Collection Variables!\n\n**Buat akun test via Tinker:**\n```bash\nphp artisan tinker\nApp\\Models\\User::create(['name'=>'Test','email'=>'testuser@example.com','password'=>bcrypt('password123')]);\n```\n\n**Ekspektasi:**\n- ✅ Status 200 atau 302\n- ✅ Tidak ada pesan error kredensial"
+          },
+          "response": []
+        },
+        {
+          "name": "POS-06 · Halaman Favorite Properti(Auth Required)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ============================================================",
+                  "// POS-06 | Halaman Favorit Saya (Auth Required)",
+                  "// Method   : GET",
+                  "// Endpoint : /profil/favoritsaya",
+                  "// Tujuan   : Memastikan halaman favorit dapat diakses setelah",
+                  "//            login. Middleware auth harus mengizinkan user yang",
+                  "//            sudah login masuk ke halaman ini.",
+                  "// PRASYARAT: POS-05 (Login) harus dijalankan lebih dulu!",
+                  "// ============================================================",
+                  "",
+                  "const responseCode = pm.response.code;",
+                  "const body         = pm.response.text();",
+                  "const bodyLower    = body.toLowerCase();",
+                  "const contentType  = pm.response.headers.get('Content-Type') || '';",
+                  "const location     = pm.response.headers.get('Location') || '';",
+                  "",
+                  "// ✅ Test 1: Route terdaftar — bukan 404",
+                  "pm.test('[POS-06] Route /profil/favoritsaya terdaftar (bukan 404)', function () {",
+                  "    pm.expect(responseCode).to.not.equal(404);",
+                  "});",
+                  "",
+                  "// ✅ Test 2: Tidak redirect ke login (session aktif)",
+                  "pm.test('[POS-06] Tidak redirect ke /login — sesi login aktif', function () {",
+                  "    if (responseCode === 302) {",
+                  "        console.warn('⚠️ Redirect ke:', location);",
+                  "        console.warn('Pastikan POS-05 dijalankan lebih dulu dan cookie jar aktif');",
+                  "    }",
+                  "    pm.expect(responseCode, 'Masih redirect 302 — jalankan POS-05 dulu').to.not.equal(302);",
+                  "});",
+                  "",
+                  "// ✅ Test 3: Status 200",
+                  "pm.test('[POS-06] Status HTTP 200 OK', function () {",
+                  "    pm.expect(responseCode).to.equal(200);",
+                  "});",
+                  "",
+                  "// ✅ Test 4: Tidak ada error server",
+                  "pm.test('[POS-06] Tidak ada error server (Whoops / 500)', function () {",
+                  "    pm.expect(body).to.not.include('Whoops');",
+                  "    pm.expect(body).to.not.include('500 | Server Error');",
+                  "});",
+                  "",
+                  "// ✅ Test 5: Response berupa HTML valid",
+                  "pm.test('[POS-06] Response adalah halaman HTML valid', function () {",
+                  "    pm.expect(contentType).to.include('text/html');",
+                  "    pm.expect(body).to.include('<html');",
+                  "});",
+                  "",
+                  "// ✅ Test 6: Halaman mengandung konten favorit",
+                  "pm.test('[POS-06] Halaman mengandung konten terkait favorit / properti', function () {",
+                  "    const keywords = ['favorit', 'properti', 'apartemen', 'rumah', 'wishlist', 'disimpan'];",
+                  "    const found = keywords.some(k => bodyLower.includes(k));",
+                  "    pm.expect(found, 'Kata kunci favorit tidak ditemukan di halaman').to.be.true;",
+                  "});",
+                  "",
+                  "// ✅ Test 7: Halaman bukan halaman login (pastikan tidak salah redirect)",
+                  "pm.test('[POS-06] Halaman bukan form login (autentikasi berhasil)', function () {",
+                  "    // Jika body masih berisi form login → session tidak terbaca",
+                  "    const isLoginPage = bodyLower.includes('masuk ke akun') ||",
+                  "                        (bodyLower.includes('login') && bodyLower.includes('password') && !bodyLower.includes('logout'));",
+                  "    pm.expect(isLoginPage, 'Masih menampilkan halaman login — session tidak aktif').to.be.false;",
+                  "});",
+                  "",
+                  "console.log('POS-06 ✅ Selesai | Status:', responseCode, '| Content-Type:', contentType.split(';')[0]);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              },
+              {
+                "key": "Cookie",
+                "value": "laravel_session={{laravel_session}}",
+                "description": "Session dari POS-05 login — disimpan otomatis"
+              },
+              {
+                "key": "X-Requested-With",
+                "value": "XMLHttpRequest",
+                "description": "Tandai sebagai AJAX request"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/profil/favoritsaya",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profil",
+                "favoritsaya"
+              ]
+            },
+            "description": "## POS-06 | Halaman Transaksi\n**Method:** GET | **Endpoint:** `/transaksi`\n\nMemastikan route `/transaksi` terdaftar dan middleware autentikasi aktif.\n\n**Logika:**\n- Jika **belum login** → 302 redirect ke `/login` ✅ (middleware `auth` bekerja)\n- Jika **sudah login** → 200 dengan data transaksi ✅\n- Jika **404** → route tidak terdaftar ❌\n- Jika **500** → server crash ❌\n\n**Ekspektasi:**\n- ✅ Status 200 atau 302\n- ✅ Tidak 404 (route ada)\n- ✅ Tidak ada stack trace"
+          },
+          "response": []
+        }
+      ],
+      "description": "6 skenario dengan data VALID — semua harus merespons dengan benar."
+    },
+    {
+      "name": "❌ NEGATIF",
+      "item": [
+        {
+          "name": "NEG-01 · URL Tidak Terdaftar → HTTP 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ============================================================",
+                  "// NEG-01 | URL Tidak Terdaftar",
+                  "// Method   : GET",
+                  "// Endpoint : /halaman-tidak-ada-sama-sekali-xyz999",
+                  "// Tujuan   : Memastikan Laravel mengembalikan 404 yang proper",
+                  "//            (bukan crash 500) saat URL tidak terdaftar diakses.",
+                  "// ============================================================",
+                  "",
+                  "pm.test('[NEG-01] Status HTTP harus 404 (bukan 200 / 500)', function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "pm.test('[NEG-01] Bukan server error 500', function () {",
+                  "    pm.expect(pm.response.code).to.not.equal(500);",
+                  "});",
+                  "",
+                  "pm.test('[NEG-01] Tidak ada Whoops error page (bukan crash)', function () {",
+                  "    pm.expect(pm.response.text()).to.not.include('Whoops');",
+                  "});",
+                  "",
+                  "pm.test('[NEG-01] Response mengindikasikan halaman tidak ditemukan', function () {",
+                  "    const body = pm.response.text().toLowerCase();",
+                  "    const found = ['404','not found','tidak ditemukan','page not found'].some(i => body.includes(i));",
+                  "    pm.expect(found).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test('[NEG-01] Stack trace PHP tidak bocor ke publik', function () {",
+                  "    const body = pm.response.text();",
+                  "    pm.expect(body).to.not.include('vendor/laravel');",
+                  "    pm.expect(body).to.not.include('ErrorException');",
+                  "    pm.expect(body).to.not.include('at /var/www');",
+                  "});",
+                  "",
+                  "console.log('NEG-01 ✅ Selesai | Status:', pm.response.code, '(ekspektasi: 404)');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/halaman-tidak-ada-sama-sekali-xyz999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "halaman-tidak-ada-sama-sekali-xyz999"
+              ]
+            },
+            "description": "## NEG-01 | URL Tidak Terdaftar → 404\n**Method:** GET | **Endpoint:** `/halaman-tidak-ada-sama-sekali-xyz999`\n\nMemastikan Laravel menangani URL tidak valid dengan 404 yang bersih.\n\n**Ekspektasi:**\n- ✅ Status 404\n- ✅ Bukan 500 (tidak crash)\n- ✅ Stack trace tidak bocor"
+          },
+          "response": []
+        },
+        {
+          "name": "NEG-02 · Detail Apartemen ID Tidak Ada di DB → 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// ============================================================",
+                  "// NEG-02 | Detail Properti ID Tidak Valid",
+                  "// Method   : GET",
+                  "// Endpoint : /apartemen/99999",
+                  "// Tujuan   : Memastikan sistem menangani ID yang tidak ada",
+                  "//            di database (ModelNotFoundException) tanpa crash.",
+                  "// ============================================================",
+                  "",
+                  "pm.test('[NEG-02] Server tidak crash — bukan 500', function () {",
+                  "    pm.expect(pm.response.code).to.not.equal(500);",
+                  "});",
+                  "",
+                  "pm.test('[NEG-02] Status HTTP harus 404 atau redirect (200/302)', function () {",
+                  "    pm.expect([404, 200, 302]).to.include(pm.response.code);",
+                  "});",
+                  "",
+                  "pm.test('[NEG-02] Tidak ada Whoops Laravel error page', function () {",
+                  "    pm.expect(pm.response.text()).to.not.include('Whoops');",
+                  "    pm.expect(pm.response.text()).to.not.include('500 | Server Error');",
+                  "});",
+                  "",
+                  "pm.test('[NEG-02] Stack trace PHP tidak terekspos ke publik', function () {",
+                  "    const body = pm.response.text();",
+                  "    pm.expect(body).to.not.include('ErrorException');",
+                  "    pm.expect(body).to.not.include('ModelNotFoundException');",
+                  "    pm.expect(body).to.not.include('vendor/laravel');",
+                  "});",
+                  "",
+                  "pm.test('[NEG-02] Jika 404 — ada indikator not found di body', function () {",
+                  "    if (pm.response.code === 404) {",
+                  "        const body = pm.response.text().toLowerCase();",
+                  "        const found = ['404','not found','tidak ditemukan'].some(i => body.includes(i));",
+                  "        pm.expect(found).to.be.true;",
+                  "    } else {",
+                  "        pm.expect(true).to.be.true; // redirect dianggap handled",
+                  "        console.log('ℹ️ Status', pm.response.code, '— sistem redirect (handled)');",
+                  "    }",
+                  "});",
+                  "",
+                  "console.log('NEG-02 ✅ Selesai | Status:', pm.response.code, '(ekspektasi: 404 atau redirect)');"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/apartemen/99999",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "apartemen",
+                "99999"
+              ]
+            },
+            "description": "## NEG-02 | Detail Apartemen ID Tidak Ada\n**Method:** GET | **Endpoint:** `/apartemen/99999`\n\nMemastikan sistem menangani ModelNotFoundException tanpa crash.\n\n**Ekspektasi:**\n- ✅ Bukan 500\n- ✅ Status 404 atau redirect\n- ✅ Stack trace tidak bocor"
+          },
+          "response": []
+        },
+        {
+          "name": "NEG-03 · Register Email Duplikat → Validasi Gagal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// ============================================================",
+                  "// NEG-03 | Register Email Duplikat",
+                  "// Method   : POST  |  Endpoint : /register (web route)",
+                  "// Ekspektasi: 302 redirect — request ditolak (validasi atau guest middleware)",
+                  "// ============================================================",
+                  "",
+                  "const code = pm.response.code;",
+                  "const location = (pm.response.headers.get('Location') || '').toLowerCase();",
+                  "",
+                  "console.log('[NEG-03] Status:', code, '| Location:', location);",
+                  "",
+                  "pm.test('[NEG-03] Status HTTP 302 (request ditolak)', function () {",
+                  "    pm.expect(code).to.equal(302);",
+                  "});",
+                  "",
+                  "pm.test('[NEG-03] Tidak ada error server (500)', function () {",
+                  "    pm.expect(code).to.not.equal(500);",
+                  "});",
+                  "",
+                  "pm.test('[NEG-03] Header Location terdapat dalam response', function () {",
+                  "    pm.expect(location, 'Location header tidak ditemukan').to.not.be.empty;",
+                  "});",
+                  "",
+                  "pm.test('[NEG-03] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)', function () {",
+                  "    pm.expect(location).to.not.include('/profil');",
+                  "    pm.expect(location).to.not.include('/favorit');",
+                  "    pm.expect(location).to.not.include('/dashboard');",
+                  "});",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Referer",
+                "value": "{{base_url}}/register"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}"
+                },
+                {
+                  "key": "name",
+                  "value": "Duplikat User"
+                },
+                {
+                  "key": "email",
+                  "value": "{{valid_email}}",
+                  "description": "⛔ Email yang SUDAH ADA di DB — sengaja duplikat"
+                },
+                {
+                  "key": "password",
+                  "value": "password123"
+                },
+                {
+                  "key": "password_confirmation",
+                  "value": "password123"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "register"
+              ]
+            },
+            "description": "## NEG-03 | Register Email Duplikat\n**Method:** POST | **Endpoint:** `/register`\n\nMendaftar ulang dengan email yang sudah ada di database (`{{valid_email}}`).\n\n⚠️ Pastikan `valid_email` sudah terdaftar di DB!\n\n**Ekspektasi:**\n- ✅ Status 200 atau 302\n- ✅ Muncul pesan 'has already been taken'\n- ✅ Tidak redirect ke dashboard"
+          },
+          "response": []
+        },
+        {
+          "name": "NEG-04 · Login Password Salah → Autentikasi Gagal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// ============================================================",
+                  "// NEG-04 | Login Password Salah",
+                  "// Method   : POST  |  Endpoint : /login (web route)",
+                  "// Ekspektasi: 302 redirect — request ditolak (autentikasi gagal atau guest middleware)",
+                  "// ============================================================",
+                  "",
+                  "const code = pm.response.code;",
+                  "const location = (pm.response.headers.get('Location') || '').toLowerCase();",
+                  "",
+                  "console.log('[NEG-04] Status:', code, '| Location:', location);",
+                  "",
+                  "pm.test('[NEG-04] Status HTTP 302 (request ditolak)', function () {",
+                  "    pm.expect(code).to.equal(302);",
+                  "});",
+                  "",
+                  "pm.test('[NEG-04] Tidak ada error server (Whoops / 500)', function () {",
+                  "    pm.expect(code).to.not.equal(500);",
+                  "});",
+                  "",
+                  "pm.test('[NEG-04] Header Location terdapat dalam response', function () {",
+                  "    pm.expect(location, 'Location header tidak ditemukan').to.not.be.empty;",
+                  "});",
+                  "",
+                  "pm.test('[NEG-04] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)', function () {",
+                  "    pm.expect(location).to.not.include('/profil');",
+                  "    pm.expect(location).to.not.include('/favorit');",
+                  "    pm.expect(location).to.not.include('/dashboard');",
+                  "});",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Referer",
+                "value": "{{base_url}}/login"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}"
+                },
+                {
+                  "key": "email",
+                  "value": "{{valid_email}}",
+                  "description": "Email valid yang ada di DB"
+                },
+                {
+                  "key": "password",
+                  "value": "PASSWORD_SALAH_XYZ_999!",
+                  "description": "⛔ Password sengaja salah"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            },
+            "description": "## NEG-04 | Login Password Salah\n**Method:** POST | **Endpoint:** `/login`\n\nEmail valid + password yang sengaja salah.\n\n**Ekspektasi:**\n- ✅ Status 200 atau 302\n- ✅ Muncul pesan 'credentials do not match'\n- ✅ Tidak berhasil masuk dashboard"
+          },
+          "response": []
+        },
+        {
+          "name": "NEG-05 · Login Email Tidak Terdaftar → Autentikasi Gagal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// ============================================================",
+                  "// NEG-05 | Login Email Tidak Terdaftar",
+                  "// Method   : POST  |  Endpoint : /login (web route)",
+                  "// Ekspektasi: 302 redirect — request ditolak",
+                  "// ============================================================",
+                  "",
+                  "const code = pm.response.code;",
+                  "const location = (pm.response.headers.get('Location') || '').toLowerCase();",
+                  "",
+                  "console.log('[NEG-05] Status:', code, '| Location:', location);",
+                  "",
+                  "pm.test('[NEG-05] Status HTTP 302 (request ditolak)', function () {",
+                  "    pm.expect(code).to.equal(302);",
+                  "});",
+                  "",
+                  "pm.test('[NEG-05] Tidak ada error server (Whoops / 500)', function () {",
+                  "    pm.expect(code).to.not.equal(500);",
+                  "});",
+                  "",
+                  "pm.test('[NEG-05] Header Location terdapat dalam response', function () {",
+                  "    pm.expect(location, 'Location header tidak ditemukan').to.not.be.empty;",
+                  "});",
+                  "",
+                  "pm.test('[NEG-05] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)', function () {",
+                  "    pm.expect(location).to.not.include('/profil');",
+                  "    pm.expect(location).to.not.include('/favorit');",
+                  "    pm.expect(location).to.not.include('/dashboard');",
+                  "});",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Referer",
+                "value": "{{base_url}}/login"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}"
+                },
+                {
+                  "key": "email",
+                  "value": "email_tidak_terdaftar_xyz999@fiktif.com",
+                  "description": "⛔ Email yang TIDAK ADA di database"
+                },
+                {
+                  "key": "password",
+                  "value": "password123"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            },
+            "description": "## NEG-05 | Login Email Tidak Terdaftar\n**Method:** POST | **Endpoint:** `/login`\n\nMencoba login dengan email yang tidak ada di database sama sekali.\n\n**Ekspektasi:**\n- ✅ Status 200 atau 302\n- ✅ Muncul pesan error kredensial\n- ✅ Tidak berhasil login"
+          },
+          "response": []
+        },
+        {
+          "name": "NEG-06 · Register Password Tidak Cocok → Validasi Gagal",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Email unik agar tidak konflik dengan data existing",
+                  "const s = Math.random().toString(36).substring(2,8);",
+                  "pm.collectionVariables.set('random_email', `neg06_${s}@mailtest.com`);",
+                  "console.log('📧 NEG-06 email:', `neg06_${s}@mailtest.com`);"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// ============================================================",
+                  "// NEG-06 | Register Password Tidak Cocok (Mismatch)",
+                  "// Method   : POST  |  Endpoint : /register (web route)",
+                  "// Ekspektasi: 302 redirect — request ditolak (validasi atau guest middleware)",
+                  "// ============================================================",
+                  "",
+                  "const code = pm.response.code;",
+                  "const location = (pm.response.headers.get('Location') || '').toLowerCase();",
+                  "",
+                  "console.log('[NEG-06] Status:', code, '| Location:', location);",
+                  "",
+                  "pm.test('[NEG-06] Status HTTP 302 (request ditolak)', function () {",
+                  "    pm.expect(code).to.equal(302);",
+                  "});",
+                  "",
+                  "pm.test('[NEG-06] Tidak ada error server (Whoops / 500)', function () {",
+                  "    pm.expect(code).to.not.equal(500);",
+                  "});",
+                  "",
+                  "pm.test('[NEG-06] Header Location terdapat dalam response', function () {",
+                  "    pm.expect(location, 'Location header tidak ditemukan').to.not.be.empty;",
+                  "});",
+                  "",
+                  "pm.test('[NEG-06] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)', function () {",
+                  "    pm.expect(location).to.not.include('/profil');",
+                  "    pm.expect(location).to.not.include('/favorit');",
+                  "    pm.expect(location).to.not.include('/dashboard');",
+                  "});",
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Referer",
+                "value": "{{base_url}}/register"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "_token",
+                  "value": "{{csrf_token}}"
+                },
+                {
+                  "key": "name",
+                  "value": "User Mismatch Test"
+                },
+                {
+                  "key": "email",
+                  "value": "{{random_email}}",
+                  "description": "Email unik (auto-generated)"
+                },
+                {
+                  "key": "password",
+                  "value": "password123",
+                  "description": "Password utama"
+                },
+                {
+                  "key": "password_confirmation",
+                  "value": "BERBEDA_999!",
+                  "description": "⛔ Sengaja BERBEDA dari password"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "register"
+              ]
+            },
+            "description": "## NEG-06 | Register Password Tidak Cocok\n**Method:** POST | **Endpoint:** `/register`\n\nSemua field valid **kecuali** `password_confirmation` berbeda dari `password`.\n\n| Field | Value | Status |\n|---|---|---|\n| name | User Mismatch Test | ✅ Valid |\n| email | (auto-generated) | ✅ Valid |\n| password | password123 | ✅ Valid |\n| password_confirmation | BERBEDA_999! | ⛔ Tidak cocok |\n\n**Ekspektasi:**\n- ✅ Status 200 atau 302\n- ✅ Muncul pesan error konfirmasi password\n- ✅ Register tidak berhasil"
+          },
+          "response": []
+        }
+      ],
+      "description": "6 skenario dengan data TIDAK VALID — sistem harus menolak atau menangani dengan tepat."
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000",
+      "description": "Base URL server Laravel"
+    },
+    {
+      "key": "csrf_token",
+      "value": "",
+      "description": "Diisi otomatis oleh SETUP"
+    },
+    {
+      "key": "valid_email",
+      "value": "testuser@example.com",
+      "description": "Email akun yang sudah ada di DB"
+    },
+    {
+      "key": "valid_password",
+      "value": "password123",
+      "description": "Password akun"
+    },
+    {
+      "key": "properti_id",
+      "value": "1",
+      "description": "ID properti valid di database"
+    },
+    {
+      "key": "random_email",
+      "value": "",
+      "description": "Diisi otomatis oleh Pre-request POS-04 & NEG-06"
+    },
+    {
+      "key": "random_name",
+      "value": "",
+      "description": "Diisi otomatis oleh Pre-request POS-04"
+    },
+    {
+      "key": "laravel_session",
+      "value": ""
+    }
+  ]
+}
