@@ -1,0 +1,756 @@
+{
+	"id": "59e87df3-7621-4eb7-8bcb-436075055a58",
+	"name": "API Integration Testing Copy",
+	"timestamp": "2026-06-15T15:06:43.992Z",
+	"collection_id": "52787859-a0c324cd-c2fe-4c82-9671-a71a467bb722",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 64,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2026-06-15T15:06:35.116Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "a4e00021-aaf3-40e9-b779-5228a75c5134",
+			"name": "SETUP-01 · Ambil CSRF Token dari Halaman Login",
+			"url": "http://127.0.0.1:8000/sanctum/csrf-cookie",
+			"time": 225,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"[SETUP-01] Sanctum CSRF Cookie — HTTP 204": true,
+				"[SETUP-01] CSRF Token berhasil diambil dari cookie": true
+			},
+			"testPassFailCounts": {
+				"[SETUP-01] Sanctum CSRF Cookie — HTTP 204": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SETUP-01] CSRF Token berhasil diambil dari cookie": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				225
+			],
+			"allTests": [
+				{
+					"[SETUP-01] Sanctum CSRF Cookie — HTTP 204": true,
+					"[SETUP-01] CSRF Token berhasil diambil dari cookie": true
+				}
+			]
+		},
+		{
+			"id": "0596c035-d240-475a-9ad8-7b952c0fc05e",
+			"name": "SETUP-02 · Ambil CSRF Token dari Halaman Register",
+			"url": "http://127.0.0.1:8000/sanctum/csrf-cookie",
+			"time": 158,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"[SETUP-02] Sanctum CSRF Cookie — HTTP 204": true,
+				"[SETUP-02] CSRF Token berhasil diambil dari cookie": true
+			},
+			"testPassFailCounts": {
+				"[SETUP-02] Sanctum CSRF Cookie — HTTP 204": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[SETUP-02] CSRF Token berhasil diambil dari cookie": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				158
+			],
+			"allTests": [
+				{
+					"[SETUP-02] Sanctum CSRF Cookie — HTTP 204": true,
+					"[SETUP-02] CSRF Token berhasil diambil dari cookie": true
+				}
+			]
+		},
+		{
+			"id": "f81ed5f2-db51-4605-a783-b4c21e789281",
+			"name": "POS-01 · Halaman Utama Dapat Diakses",
+			"url": "http://127.0.0.1:8000/",
+			"time": 270,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"[POS-01] Status HTTP harus 200": true,
+				"[POS-01] Content-Type harus text/html": true,
+				"[POS-01] Response body tidak kosong (> 1 KB)": true,
+				"[POS-01] Tidak ada Laravel error page (Whoops / 500)": true,
+				"[POS-01] Halaman mengandung tag HTML yang valid": true,
+				"[POS-01] Halaman mengandung konten terkait properti": true
+			},
+			"testPassFailCounts": {
+				"[POS-01] Status HTTP harus 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-01] Content-Type harus text/html": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-01] Response body tidak kosong (> 1 KB)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-01] Tidak ada Laravel error page (Whoops / 500)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-01] Halaman mengandung tag HTML yang valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-01] Halaman mengandung konten terkait properti": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				270
+			],
+			"allTests": [
+				{
+					"[POS-01] Status HTTP harus 200": true,
+					"[POS-01] Content-Type harus text/html": true,
+					"[POS-01] Response body tidak kosong (> 1 KB)": true,
+					"[POS-01] Tidak ada Laravel error page (Whoops / 500)": true,
+					"[POS-01] Halaman mengandung tag HTML yang valid": true,
+					"[POS-01] Halaman mengandung konten terkait properti": true
+				}
+			]
+		},
+		{
+			"id": "96026c00-95bf-4d78-90d4-826a913b4be8",
+			"name": "POS-02 · Daftar Apartemen Dapat Diakses",
+			"url": "http://127.0.0.1:8000/apartemen",
+			"time": 195,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"[POS-02] Status HTTP harus 200": true,
+				"[POS-02] Content-Type harus text/html": true,
+				"[POS-02] Response body lebih dari 2 KB (ada data listing)": true,
+				"[POS-02] Tidak ada Laravel error (Whoops / 500)": true,
+				"[POS-02] Halaman mengandung kata kunci listing properti": true,
+				"[POS-02] Halaman berhasil dirender (ada tag body)": true
+			},
+			"testPassFailCounts": {
+				"[POS-02] Status HTTP harus 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-02] Content-Type harus text/html": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-02] Response body lebih dari 2 KB (ada data listing)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-02] Tidak ada Laravel error (Whoops / 500)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-02] Halaman mengandung kata kunci listing properti": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-02] Halaman berhasil dirender (ada tag body)": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				195
+			],
+			"allTests": [
+				{
+					"[POS-02] Status HTTP harus 200": true,
+					"[POS-02] Content-Type harus text/html": true,
+					"[POS-02] Response body lebih dari 2 KB (ada data listing)": true,
+					"[POS-02] Tidak ada Laravel error (Whoops / 500)": true,
+					"[POS-02] Halaman mengandung kata kunci listing properti": true,
+					"[POS-02] Halaman berhasil dirender (ada tag body)": true
+				}
+			]
+		},
+		{
+			"id": "d5baff83-1ee1-42e9-b8cf-471818f159a7",
+			"name": "POS-03 · Detail Apartemen ID Valid (ID=1)",
+			"url": "http://127.0.0.1:8000/apartemen/1",
+			"time": 180,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"[POS-03] Status HTTP harus 200": true,
+				"[POS-03] Bukan halaman 404 — properti ditemukan di DB": true,
+				"[POS-03] Tidak ada Laravel error page (Whoops / 500)": true,
+				"[POS-03] Halaman mengandung info harga properti (Rp / IDR)": true,
+				"[POS-03] Halaman mengandung elemen detail properti": true
+			},
+			"testPassFailCounts": {
+				"[POS-03] Status HTTP harus 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-03] Bukan halaman 404 — properti ditemukan di DB": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-03] Tidak ada Laravel error page (Whoops / 500)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-03] Halaman mengandung info harga properti (Rp / IDR)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-03] Halaman mengandung elemen detail properti": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				180
+			],
+			"allTests": [
+				{
+					"[POS-03] Status HTTP harus 200": true,
+					"[POS-03] Bukan halaman 404 — properti ditemukan di DB": true,
+					"[POS-03] Tidak ada Laravel error page (Whoops / 500)": true,
+					"[POS-03] Halaman mengandung info harga properti (Rp / IDR)": true,
+					"[POS-03] Halaman mengandung elemen detail properti": true
+				}
+			]
+		},
+		{
+			"id": "a2e05083-7e78-4200-98bb-67eeb7123baf",
+			"name": "POS-04 · Register Pengguna Baru",
+			"url": "http://127.0.0.1:8000/register",
+			"time": 4485,
+			"responseCode": {
+				"code": 302,
+				"name": "Found"
+			},
+			"tests": {
+				"[POS-04] Status HTTP 200 atau 302 (sukses / redirect)": true,
+				"[POS-04] Tidak ada error server (Whoops / 500)": true,
+				"[POS-04] Email tidak ditolak sebagai duplikat": true,
+				"[POS-04] Tidak ada error validasi password": true,
+				"[POS-04] Tidak ada error validasi field wajib": true
+			},
+			"testPassFailCounts": {
+				"[POS-04] Status HTTP 200 atau 302 (sukses / redirect)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-04] Tidak ada error server (Whoops / 500)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-04] Email tidak ditolak sebagai duplikat": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-04] Tidak ada error validasi password": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-04] Tidak ada error validasi field wajib": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				4485
+			],
+			"allTests": [
+				{
+					"[POS-04] Status HTTP 200 atau 302 (sukses / redirect)": true,
+					"[POS-04] Tidak ada error server (Whoops / 500)": true,
+					"[POS-04] Email tidak ditolak sebagai duplikat": true,
+					"[POS-04] Tidak ada error validasi password": true,
+					"[POS-04] Tidak ada error validasi field wajib": true
+				}
+			]
+		},
+		{
+			"id": "5165be8e-43bc-4c3a-b551-55ba25734e0f",
+			"name": "POS-05 · Login Pengguna — Kredensial Valid",
+			"url": "http://127.0.0.1:8000/login",
+			"time": 186,
+			"responseCode": {
+				"code": 302,
+				"name": "Found"
+			},
+			"tests": {
+				"[POS-05] Status HTTP 200 atau 302 (sukses / redirect)": true,
+				"[POS-05] Tidak ada error server (Whoops / 500)": true,
+				"[POS-05] Tidak ada pesan error kredensial tidak cocok": true,
+				"[POS-05] Tidak ada error validasi field login": true,
+				"[POS-05] Response berhasil diterima server": true
+			},
+			"testPassFailCounts": {
+				"[POS-05] Status HTTP 200 atau 302 (sukses / redirect)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-05] Tidak ada error server (Whoops / 500)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-05] Tidak ada pesan error kredensial tidak cocok": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-05] Tidak ada error validasi field login": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-05] Response berhasil diterima server": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				186
+			],
+			"allTests": [
+				{
+					"[POS-05] Status HTTP 200 atau 302 (sukses / redirect)": true,
+					"[POS-05] Tidak ada error server (Whoops / 500)": true,
+					"[POS-05] Tidak ada pesan error kredensial tidak cocok": true,
+					"[POS-05] Tidak ada error validasi field login": true,
+					"[POS-05] Response berhasil diterima server": true
+				}
+			]
+		},
+		{
+			"id": "11bc3c75-79ca-4a0e-ac21-b51f3ad3d23c",
+			"name": "POS-06 · Halaman Favorite Properti(Auth Required)",
+			"url": "http://127.0.0.1:8000/profil/favoritsaya",
+			"time": 176,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"[POS-06] Route /profil/favoritsaya terdaftar (bukan 404)": true,
+				"[POS-06] Tidak redirect ke /login — sesi login aktif": true,
+				"[POS-06] Status HTTP 200 OK": true,
+				"[POS-06] Tidak ada error server (Whoops / 500)": true,
+				"[POS-06] Response adalah halaman HTML valid": true,
+				"[POS-06] Halaman mengandung konten terkait favorit / properti": true,
+				"[POS-06] Halaman bukan form login (autentikasi berhasil)": true
+			},
+			"testPassFailCounts": {
+				"[POS-06] Route /profil/favoritsaya terdaftar (bukan 404)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-06] Tidak redirect ke /login — sesi login aktif": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-06] Status HTTP 200 OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-06] Tidak ada error server (Whoops / 500)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-06] Response adalah halaman HTML valid": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-06] Halaman mengandung konten terkait favorit / properti": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[POS-06] Halaman bukan form login (autentikasi berhasil)": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				176
+			],
+			"allTests": [
+				{
+					"[POS-06] Route /profil/favoritsaya terdaftar (bukan 404)": true,
+					"[POS-06] Tidak redirect ke /login — sesi login aktif": true,
+					"[POS-06] Status HTTP 200 OK": true,
+					"[POS-06] Tidak ada error server (Whoops / 500)": true,
+					"[POS-06] Response adalah halaman HTML valid": true,
+					"[POS-06] Halaman mengandung konten terkait favorit / properti": true,
+					"[POS-06] Halaman bukan form login (autentikasi berhasil)": true
+				}
+			]
+		},
+		{
+			"id": "d23b8039-1159-418e-a532-fd8193d4bb62",
+			"name": "NEG-01 · URL Tidak Terdaftar → HTTP 404",
+			"url": "http://127.0.0.1:8000/halaman-tidak-ada-sama-sekali-xyz999",
+			"time": 144,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"[NEG-01] Status HTTP harus 404 (bukan 200 / 500)": true,
+				"[NEG-01] Bukan server error 500": true,
+				"[NEG-01] Tidak ada Whoops error page (bukan crash)": true,
+				"[NEG-01] Response mengindikasikan halaman tidak ditemukan": true,
+				"[NEG-01] Stack trace PHP tidak bocor ke publik": true
+			},
+			"testPassFailCounts": {
+				"[NEG-01] Status HTTP harus 404 (bukan 200 / 500)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-01] Bukan server error 500": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-01] Tidak ada Whoops error page (bukan crash)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-01] Response mengindikasikan halaman tidak ditemukan": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-01] Stack trace PHP tidak bocor ke publik": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				144
+			],
+			"allTests": [
+				{
+					"[NEG-01] Status HTTP harus 404 (bukan 200 / 500)": true,
+					"[NEG-01] Bukan server error 500": true,
+					"[NEG-01] Tidak ada Whoops error page (bukan crash)": true,
+					"[NEG-01] Response mengindikasikan halaman tidak ditemukan": true,
+					"[NEG-01] Stack trace PHP tidak bocor ke publik": true
+				}
+			]
+		},
+		{
+			"id": "2a6955df-8e64-4a76-80c1-719fc8217053",
+			"name": "NEG-02 · Detail Apartemen ID Tidak Ada di DB → 404",
+			"url": "http://127.0.0.1:8000/apartemen/99999",
+			"time": 293,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"[NEG-02] Server tidak crash — bukan 500": true,
+				"[NEG-02] Status HTTP harus 404 atau redirect (200/302)": true,
+				"[NEG-02] Tidak ada Whoops Laravel error page": true,
+				"[NEG-02] Stack trace PHP tidak terekspos ke publik": true,
+				"[NEG-02] Jika 404 — ada indikator not found di body": true
+			},
+			"testPassFailCounts": {
+				"[NEG-02] Server tidak crash — bukan 500": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-02] Status HTTP harus 404 atau redirect (200/302)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-02] Tidak ada Whoops Laravel error page": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-02] Stack trace PHP tidak terekspos ke publik": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-02] Jika 404 — ada indikator not found di body": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				293
+			],
+			"allTests": [
+				{
+					"[NEG-02] Server tidak crash — bukan 500": true,
+					"[NEG-02] Status HTTP harus 404 atau redirect (200/302)": true,
+					"[NEG-02] Tidak ada Whoops Laravel error page": true,
+					"[NEG-02] Stack trace PHP tidak terekspos ke publik": true,
+					"[NEG-02] Jika 404 — ada indikator not found di body": true
+				}
+			]
+		},
+		{
+			"id": "ea9818f7-b6ef-4bcc-9d40-ff5d7658d397",
+			"name": "NEG-03 · Register Email Duplikat → Validasi Gagal",
+			"url": "http://127.0.0.1:8000/register",
+			"time": 265,
+			"responseCode": {
+				"code": 302,
+				"name": "Found"
+			},
+			"tests": {
+				"[NEG-03] Status HTTP 302 (request ditolak)": true,
+				"[NEG-03] Tidak ada error server (500)": true,
+				"[NEG-03] Header Location terdapat dalam response": true,
+				"[NEG-03] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)": true
+			},
+			"testPassFailCounts": {
+				"[NEG-03] Status HTTP 302 (request ditolak)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-03] Tidak ada error server (500)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-03] Header Location terdapat dalam response": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-03] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				265
+			],
+			"allTests": [
+				{
+					"[NEG-03] Status HTTP 302 (request ditolak)": true,
+					"[NEG-03] Tidak ada error server (500)": true,
+					"[NEG-03] Header Location terdapat dalam response": true,
+					"[NEG-03] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)": true
+				}
+			]
+		},
+		{
+			"id": "6b295d82-6d4f-43bf-8ab2-73382be79e16",
+			"name": "NEG-04 · Login Password Salah → Autentikasi Gagal",
+			"url": "http://127.0.0.1:8000/login",
+			"time": 189,
+			"responseCode": {
+				"code": 302,
+				"name": "Found"
+			},
+			"tests": {
+				"[NEG-04] Status HTTP 302 (request ditolak)": true,
+				"[NEG-04] Tidak ada error server (Whoops / 500)": true,
+				"[NEG-04] Header Location terdapat dalam response": true,
+				"[NEG-04] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)": true
+			},
+			"testPassFailCounts": {
+				"[NEG-04] Status HTTP 302 (request ditolak)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-04] Tidak ada error server (Whoops / 500)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-04] Header Location terdapat dalam response": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-04] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				189
+			],
+			"allTests": [
+				{
+					"[NEG-04] Status HTTP 302 (request ditolak)": true,
+					"[NEG-04] Tidak ada error server (Whoops / 500)": true,
+					"[NEG-04] Header Location terdapat dalam response": true,
+					"[NEG-04] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)": true
+				}
+			]
+		},
+		{
+			"id": "f156b632-d7fb-449a-828b-d5ac0287cf11",
+			"name": "NEG-05 · Login Email Tidak Terdaftar → Autentikasi Gagal",
+			"url": "http://127.0.0.1:8000/login",
+			"time": 144,
+			"responseCode": {
+				"code": 302,
+				"name": "Found"
+			},
+			"tests": {
+				"[NEG-05] Status HTTP 302 (request ditolak)": true,
+				"[NEG-05] Tidak ada error server (Whoops / 500)": true,
+				"[NEG-05] Header Location terdapat dalam response": true,
+				"[NEG-05] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)": true
+			},
+			"testPassFailCounts": {
+				"[NEG-05] Status HTTP 302 (request ditolak)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-05] Tidak ada error server (Whoops / 500)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-05] Header Location terdapat dalam response": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-05] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				144
+			],
+			"allTests": [
+				{
+					"[NEG-05] Status HTTP 302 (request ditolak)": true,
+					"[NEG-05] Tidak ada error server (Whoops / 500)": true,
+					"[NEG-05] Header Location terdapat dalam response": true,
+					"[NEG-05] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)": true
+				}
+			]
+		},
+		{
+			"id": "aa1b99d6-e837-4996-b467-9acdd1649c6c",
+			"name": "NEG-06 · Register Password Tidak Cocok → Validasi Gagal",
+			"url": "http://127.0.0.1:8000/register",
+			"time": 225,
+			"responseCode": {
+				"code": 302,
+				"name": "Found"
+			},
+			"tests": {
+				"[NEG-06] Status HTTP 302 (request ditolak)": true,
+				"[NEG-06] Tidak ada error server (Whoops / 500)": true,
+				"[NEG-06] Header Location terdapat dalam response": true,
+				"[NEG-06] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)": true
+			},
+			"testPassFailCounts": {
+				"[NEG-06] Status HTTP 302 (request ditolak)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-06] Tidak ada error server (Whoops / 500)": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-06] Header Location terdapat dalam response": {
+					"pass": 1,
+					"fail": 0
+				},
+				"[NEG-06] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				225
+			],
+			"allTests": [
+				{
+					"[NEG-06] Status HTTP 302 (request ditolak)": true,
+					"[NEG-06] Tidak ada error server (Whoops / 500)": true,
+					"[NEG-06] Header Location terdapat dalam response": true,
+					"[NEG-06] Tidak redirect ke halaman terautentikasi (profil/favorit/dashboard)": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 7135,
+	"collection": {
+		"requests": [
+			{
+				"id": "a4e00021-aaf3-40e9-b779-5228a75c5134",
+				"method": "GET"
+			},
+			{
+				"id": "0596c035-d240-475a-9ad8-7b952c0fc05e",
+				"method": "GET"
+			},
+			{
+				"id": "f81ed5f2-db51-4605-a783-b4c21e789281",
+				"method": "GET"
+			},
+			{
+				"id": "96026c00-95bf-4d78-90d4-826a913b4be8",
+				"method": "GET"
+			},
+			{
+				"id": "d5baff83-1ee1-42e9-b8cf-471818f159a7",
+				"method": "GET"
+			},
+			{
+				"id": "a2e05083-7e78-4200-98bb-67eeb7123baf",
+				"method": "POST"
+			},
+			{
+				"id": "5165be8e-43bc-4c3a-b551-55ba25734e0f",
+				"method": "POST"
+			},
+			{
+				"id": "11bc3c75-79ca-4a0e-ac21-b51f3ad3d23c",
+				"method": "GET"
+			},
+			{
+				"id": "d23b8039-1159-418e-a532-fd8193d4bb62",
+				"method": "GET"
+			},
+			{
+				"id": "2a6955df-8e64-4a76-80c1-719fc8217053",
+				"method": "GET"
+			},
+			{
+				"id": "ea9818f7-b6ef-4bcc-9d40-ff5d7658d397",
+				"method": "POST"
+			},
+			{
+				"id": "6b295d82-6d4f-43bf-8ab2-73382be79e16",
+				"method": "POST"
+			},
+			{
+				"id": "f156b632-d7fb-449a-828b-d5ac0287cf11",
+				"method": "POST"
+			},
+			{
+				"id": "aa1b99d6-e837-4996-b467-9acdd1649c6c",
+				"method": "POST"
+			}
+		]
+	}
+}
